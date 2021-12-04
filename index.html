@@ -1,0 +1,94 @@
+<!-- PepBoard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            margin: 0px;
+        }
+        .fa-square{
+            margin-right: 2rem;
+            margin-left: 2rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <!-- <h1>Canvas Example</h1> -->
+    <!-- drawing board area -->
+    <i class="fas fa-square"></i>
+    <i class="fas fa-grip-lines-vertical"></i>
+    <canvas></canvas>
+</body>
+<!-- html js inject -->
+<script>
+    let canvasBoard= document.querySelector("canvas");
+    let body = document.querySelector("body");
+    let square= document.querySelector(".fa-square");
+    let line= document.querySelector(".fa-grip-lines-vertical");
+
+    // canvas default size is small
+    canvasBoard.height = window.innerHeight; // pure window ki heigth
+    canvasBoard.width  = window.innerWidth;  // canvasBoard.width= 200
+
+    // this tool will give tool for our canvasBoard to draw in 2d
+    let tool= canvasBoard.getContext("2d"); //tool for canvasBoard
+
+    //rectangle build (area)
+    tool.fillStyle="green"; 
+    // tool.fillRect(0,0,200,200); //default
+    
+    //rectangle perimeter 
+    tool.strokeStyle="red";
+    // tool.strokeRect(50,50,200,200); //(x starting,y starting,height,width)
+
+    tool.fillStyle="blue";
+    // tool.fillRect(0,0,50,50);
+
+    //currentTool
+    let cTool="square";
+
+    square.addEventListener("click",function(e){
+        cTool="square";
+    })
+
+    line.addEventListener("click",function(e){
+        cTool="line";
+    })
+
+    console.log(canvasBoard.getBoundingClientRect());
+    let canvasTop=canvasBoard.getBoundingClientRect().top;
+    let canvasLeft=canvasBoard.getBoundingClientRect().left;
+
+    let iX,iY,fX,fY;
+
+    //mouse jab click karega
+    body.addEventListener("mousedown",function(pos){
+        // console.log(pos);
+        iX= pos.clientX-canvasLeft;
+        iY= pos.clientY-canvasTop;
+        // console.log(iX ,iY);
+    })
+
+    // mouse ka click jab chutega
+    body.addEventListener("mouseup",function(pos){
+        // console.log(pos);
+        fX= pos.clientX-canvasLeft;
+        fY= pos.clientY-canvasTop;
+        let width= fX-iX;
+        let height= fY-iY;
+        if(cTool=="square"){
+            tool.strokeRect(iX,iY,width,height);
+        }else{
+            tool.beginPath();
+            tool.moveTo(iX,iY);
+            tool.lineTo(fX,fY);
+            tool.stroke();
+        }
+        // console.log(fX ,fY);
+    })
+
+
+</script>
+</html>
